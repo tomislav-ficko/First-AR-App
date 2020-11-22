@@ -46,7 +46,7 @@
 
         <TextView
             android:id="@+id/tvModel"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@color/yellow"
             android:text="Models"
