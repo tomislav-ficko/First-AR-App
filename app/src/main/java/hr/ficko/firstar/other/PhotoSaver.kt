@@ -83,7 +83,7 @@ class PhotoSaver(
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, "${dateFormat}_screenshot.jpg")
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "PICTURES/TryOutFurniture")
+            put(MediaStore.MediaColumns.RELATIVE_PATH, "Pictures/TryOutFurniture")
         }
         return activity.contentResolver.insert(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
