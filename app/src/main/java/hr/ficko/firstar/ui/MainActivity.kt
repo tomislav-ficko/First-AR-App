@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.CompletableFuture
 
 private const val BOTTOM_SHEET_PEEK_HEIGHT = 50f
+private const val DOUBLE_TAP_TOLERANCE_MS = 1000L
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomSheet()
         observeLiveData()
         setupRecyclerView()
-        setupTapArPlaneListener()
+        setupDoubleTapArPlaneListener()
     }
 
     private fun setupBottomSheet() {
@@ -80,11 +81,23 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupTapArPlaneListener() {
+    private fun setupDoubleTapArPlaneListener() {
+        var firstTapTime = 0L
         arFragment.setOnTapArPlaneListener { hitResult, _, _ ->
-            loadModel { modelRenderable, viewRenderable ->
-                val anchor = hitResult.createAnchor()
-                addNodeToScene(anchor, modelRenderable, viewRenderable)
+            when {
+                firstTapTime == 0L -> {
+                    firstTapTime = System.currentTimeMillis()
+                }
+                isValidDoubleTap(firstTapTime, System.currentTimeMillis()) -> {
+                    firstTapTime = 0L
+                    loadModel { modelRenderable, viewRenderable ->
+                        val anchor = hitResult.createAnchor()
+                        addNodeToScene(anchor, modelRenderable, viewRenderable)
+                    }
+                }
+                else -> {
+                    firstTapTime = System.currentTimeMillis()
+                }
             }
         }
     }
@@ -199,4 +212,7 @@ class MainActivity : AppCompatActivity() {
     private fun initiallyNotVisible() = null
     private fun modelIsNotBeingMovedJustTapped(modelNode: TransformableNode) =
         !modelNode.isTransforming
+
+    private fun isValidDoubleTap(firstTapTime: Long, secondTapTime: Long) =
+        secondTapTime - firstTapTime < DOUBLE_TAP_TOLERANCE_MS
 }
