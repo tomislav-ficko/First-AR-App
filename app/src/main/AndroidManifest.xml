@@ -3,6 +3,7 @@
     package="hr.ficko.firstar">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- Makes sure to show app in AppStore only to those users whose devices support AR functionality -->
     <uses-feature
