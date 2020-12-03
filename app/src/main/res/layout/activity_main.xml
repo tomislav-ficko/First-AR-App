@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="hr.ficko.firstar.MainActivity">
+    tools:context="hr.ficko.firstar.ui.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
     <LinearLayout
         android:id="@+id/bottomSheet"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="@dimen/total_rv_and_tvModel_height"
         android:background="@color/light_grey"
         android:orientation="vertical"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -47,7 +47,7 @@
         <TextView
             android:id="@+id/tvModel"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/text_view_model_height"
             android:background="@color/yellow"
             android:text="Models"
             android:textAlignment="center"
@@ -57,7 +57,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvModels"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="@dimen/recycler_view_height" />
 
     </LinearLayout>
 
