@@ -47,7 +47,7 @@
         <TextView
             android:id="@+id/tvModel"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_view_model_height"
+            android:layout_height="@dimen/tv_model_height"
             android:background="@color/yellow"
             android:text="Models"
             android:textAlignment="center"
@@ -57,7 +57,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvModels"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/recycler_view_height" />
+            android:layout_height="@dimen/rv_height" />
 
     </LinearLayout>
 
