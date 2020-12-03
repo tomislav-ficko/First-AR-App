@@ -1,4 +1,4 @@
-package hr.ficko.firstar
+package hr.ficko.firstar.other
 
 import android.app.Activity
 import android.content.ContentValues

@@ -20,7 +20,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
-import hr.ficko.firstar.PhotoSaver
+import hr.ficko.firstar.other.PhotoSaver
 import hr.ficko.firstar.R
 import hr.ficko.firstar.models.Model
 import kotlinx.android.synthetic.main.activity_main.*
