@@ -20,6 +20,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
 import com.google.ar.sceneform.ux.ArFragment
 import com.google.ar.sceneform.ux.TransformableNode
+import hr.ficko.firstar.PhotoSaver
 import hr.ficko.firstar.R
 import hr.ficko.firstar.models.Model
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var modelAdapter: ModelAdapter
     private lateinit var selectedModel: Model
+    private lateinit var photoSaver: PhotoSaver
     lateinit var arFragment: ArFragment
     private val viewNodes = mutableListOf<Node>()
 
@@ -48,11 +50,13 @@ class MainActivity : AppCompatActivity() {
 
         arFragment = fragment as ArFragment
         modelAdapter = ModelAdapter(models)
+        photoSaver = PhotoSaver(this)
         setupBottomSheet()
         observeLiveData()
         setupRecyclerView()
         setupDoubleTapArPlaneListener()
         setupAutomaticModelButtonRotation()
+        setupFab()
     }
 
     private fun setupBottomSheet() {
@@ -122,6 +126,12 @@ class MainActivity : AppCompatActivity() {
             selectedModel = it
             val newTitle = "Models (${it.title})"
             tvModel.text = newTitle
+        }
+    }
+
+    private fun setupFab() {
+        fab.setOnClickListener {
+            photoSaver.takePhoto(arFragment.arSceneView)
         }
     }
 
