@@ -14,6 +14,7 @@ import com.google.ar.core.Anchor
 import com.google.ar.sceneform.AnchorNode
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.collision.Box
+import com.google.ar.sceneform.math.Quaternion
 import com.google.ar.sceneform.math.Vector3
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.ViewRenderable
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var modelAdapter: ModelAdapter
     private lateinit var selectedModel: Model
     lateinit var arFragment: ArFragment
+    private val viewNodes = mutableListOf<Node>()
 
     private val models = mutableListOf(
         Model(R.drawable.chair, "Chair", R.raw.chair),
@@ -50,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         observeLiveData()
         setupRecyclerView()
         setupDoubleTapArPlaneListener()
+        setupAutomaticModelButtonRotation()
     }
 
     private fun setupBottomSheet() {
@@ -99,6 +102,13 @@ class MainActivity : AppCompatActivity() {
                     firstTapTime = System.currentTimeMillis()
                 }
             }
+        }
+    }
+
+    private fun setupAutomaticModelButtonRotation() {
+        getCurrentScene().addOnUpdateListener {
+            // Called in each frame, 60 or more times per second
+            rotateViewNodesTowardsUser()
         }
     }
 
@@ -167,15 +177,15 @@ class MainActivity : AppCompatActivity() {
             renderable = initiallyNotVisible()
             setParent(modelNode)
             setButtonPosition(this, modelNode)
-            removeModelFromSceneIfButtonClicked(viewRenderable, anchorNode)
+            removeModelFromSceneIfButtonClicked(viewRenderable, this, anchorNode)
         }
+        viewNodes.add(viewNode)
 
         modelNode.setOnTapListener { _, _ ->
             if (modelIsNotBeingMovedJustTapped(modelNode)) {
                 toggleButton(viewNode, viewRenderable)
             }
         }
-
     }
 
     private fun toggleButton(
@@ -200,11 +210,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun removeModelFromSceneIfButtonClicked(
         viewRenderable: ViewRenderable,
+        viewNode: Node,
         anchorNode: AnchorNode
     ) {
         (viewRenderable.view as Button).setOnClickListener {
             // Since we are deleting the parent node, the children will also be deleted
             getCurrentScene().removeChild(anchorNode)
+            viewNodes.remove(viewNode)
+        }
+    }
+
+    private fun rotateViewNodesTowardsUser() {
+        for (node in viewNodes) {
+            rotateIfVisible(node)
+        }
+    }
+
+    private fun rotateIfVisible(node: Node) {
+        node.renderable?.let {
+            val cameraPosition = getCurrentScene().camera.worldPosition
+            val viewNodePosition = node.worldPosition
+            val direction = Vector3.subtract(cameraPosition, viewNodePosition)
+            node.worldRotation = Quaternion.lookRotation(direction, Vector3.up())
         }
     }
 
