@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import hr.ficko.firstar.R
@@ -13,6 +14,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 private const val BOTTOM_SHEET_PEEK_HEIGHT = 50f
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var modelAdapter: ModelAdapter
+    private lateinit var selectedModel: Model
 
     private val models = mutableListOf(
         Model(R.drawable.chair, "Chair", R.raw.chair),
@@ -25,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        modelAdapter = ModelAdapter(models)
         setupBottomSheet()
+        observeLiveData()
         setupRecyclerView()
     }
 
@@ -54,7 +60,20 @@ class MainActivity : AppCompatActivity() {
                     LinearLayoutManager.HORIZONTAL,
                     false
                 )
-            adapter = ModelAdapter(models)
+            adapter = modelAdapter
+        }
+    }
+
+    private fun observeLiveData() {
+        val dataObserver = defineDataObserver()
+        modelAdapter.selectedModelLiveData.observe(this, dataObserver)
+    }
+
+    private fun defineDataObserver() = Observer<Model> { data ->
+        data?.let {
+            selectedModel = it
+            val newTitle = "Models (${it.title})"
+            tvModel.text = newTitle
         }
     }
 }
